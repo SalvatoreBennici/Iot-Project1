@@ -18,6 +18,7 @@ void gameOver() {
   Serial.println(score);
   delay(200);
   resetGame();
+  Serial.println("Welcome to the Catch the Bouncing Led Ball Game. Press Key T1 to Start");
   gameState = GAME_WAITING;
 }
 
@@ -40,6 +41,7 @@ void gameRunning() {
   if(isSomeButtonPressed()) {
     if(isBallCatched()){
       goToNextLevel();
+      prevTime = timeStep;
     } else {
       gameState = GAME_OVER;
     }
@@ -73,7 +75,6 @@ void goToNextLevel() {
 
 void elaborateDifficulty(){
   timeStep = 3000 * exp(-((double)difficultyLevel/5) -((double)level/7)); // a * exp[-(x/b) -(y/c)]
-  Serial.println(timeStep);
 }
 
 bool isPlayerReady() {
@@ -93,7 +94,7 @@ void setDifficultyLevel() {
 void checkSleepMode() {
   if(sleepTime == 0) {
     sleepTime = millis();
-  } else if(millis() - sleepTime >= 4000){
+  } else if(millis() - sleepTime >= 10000){
     enterSleep();
     sleepTime = 0;
   }
@@ -103,7 +104,6 @@ void checkSleepMode() {
 }
 
 void resetGame() {
-  difficultyLevel = 1;
   score = 0;
   level = 1;
   sleepTime = 0;
